@@ -1,0 +1,271 @@
+{
+  "info": {
+    "name": "Document Management Service API",
+    "description": "API Collection for Document Management Service Challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Document",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "metadata",
+              "value": "{\"user\":\"john\",\"name\":\"contract\",\"tags\":[\"important\",\"legal\"]}",
+              "type": "text",
+              "contentType": "application/json"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/path/to/your/document.pdf",
+              "contentType": "application/pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/upload",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "upload"]
+        },
+        "description": "Upload a PDF document with metadata (user, name, tags)"
+      },
+      "response": []
+    },
+    {
+      "name": "Search All Documents",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/search?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "search"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0",
+              "description": "Page number (zero-based)"
+            },
+            {
+              "key": "size",
+              "value": "20",
+              "description": "Number of items per page"
+            }
+          ]
+        },
+        "description": "Search for all documents without filters"
+      },
+      "response": []
+    },
+    {
+      "name": "Search by User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user\": \"john\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/search?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "search"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Search documents by user name"
+      },
+      "response": []
+    },
+    {
+      "name": "Search by Name",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"contract\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/search?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "search"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Search documents by document name (partial match)"
+      },
+      "response": []
+    },
+    {
+      "name": "Search by Tags",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tags\": [\"important\", \"legal\"]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/search?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "search"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Search documents by tags (document must have ALL specified tags)"
+      },
+      "response": []
+    },
+    {
+      "name": "Search with Multiple Filters",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user\": \"john\",\n  \"name\": \"contract\",\n  \"tags\": [\"important\"]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/document-management/search?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "search"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Search documents with multiple filters combined"
+      },
+      "response": []
+    },
+    {
+      "name": "Download Document",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/document-management/download/:documentId",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["document-management", "download", ":documentId"],
+          "variable": [
+            {
+              "key": "documentId",
+              "value": "{{documentId}}",
+              "description": "UUID of the document to download"
+            }
+          ]
+        },
+        "description": "Get a presigned download URL for a document. Replace :documentId with actual UUID from search results."
+      },
+      "response": []
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["actuator", "health"]
+        },
+        "description": "Check the health status of the application"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "documentId",
+      "value": "REPLACE_WITH_ACTUAL_DOCUMENT_ID",
+      "type": "string"
+    }
+  ]
+}
+

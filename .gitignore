@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Project Specific ###
+SOLUTION.md
+CI-CD-GUIDE.md
+E2E_TEST_SUMMARY.md
+*.bat
+.FullName

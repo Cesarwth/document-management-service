@@ -1,0 +1,287 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build-and-test:
+    name: Build, Test & Validate
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: challenge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      minio:
+        image: minio/minio:latest
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        ports:
+          - 9000:9000
+          - 9001:9001
+        options: >-
+          --health-cmd "curl -f http://localhost:9000/minio/health/live || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        volumes:
+          - minio-data:/data
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Verify Maven version
+        run: mvn --version
+
+      - name: Check code formatting (Spotless)
+        run: mvn spotless:check
+        continue-on-error: false
+
+      - name: Compile code
+        run: mvn clean compile -DskipTests
+
+      - name: Run unit and integration tests
+        run: mvn test
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      - name: Generate test coverage report
+        run: mvn jacoco:report
+
+      - name: Upload test coverage to Codecov (optional)
+        if: success()
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./target/site/jacoco/jacoco.xml
+          flags: unittests
+          fail_ci_if_error: false
+          verbose: true
+        continue-on-error: true
+
+      - name: Package application
+        run: mvn package -DskipTests
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-jar
+          path: target/*.jar
+          retention-days: 7
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            target/surefire-reports/
+            target/site/jacoco/
+          retention-days: 7
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Maven Tests
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build application JAR
+        run: mvn clean package -DskipTests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: document-management-service:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          docker images | grep document-management-service || echo "Image not found"
+
+  integration-validation:
+    name: Full Stack Integration Test
+    runs-on: ubuntu-latest
+    needs: docker-build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Docker network
+        run: docker network create app-network || true
+
+      - name: Start PostgreSQL
+        run: |
+          docker run -d --name postgres \
+            --network app-network \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_DB=challenge \
+            -p 5432:5432 \
+            postgres:16-alpine
+          
+          echo "Waiting for PostgreSQL to be ready..."
+          timeout 30 bash -c 'until docker exec postgres pg_isready -U postgres; do sleep 2; done'
+
+      - name: Initialize database schema
+        run: |
+          docker exec -i postgres psql -U postgres -d challenge < docker/init-scripts/schema-init.sql
+
+      - name: Start MinIO
+        run: |
+          docker run -d --name minio \
+            --network app-network \
+            -e MINIO_ROOT_USER=minioadmin \
+            -e MINIO_ROOT_PASSWORD=minioadmin \
+            -p 9000:9000 \
+            -p 9001:9001 \
+            minio/minio:latest \
+            server /data --console-address ":9001"
+          
+          echo "Waiting for MinIO to be ready..."
+          sleep 10
+
+      - name: Build application
+        run: mvn clean package -DskipTests
+
+      - name: Build Docker image
+        run: docker build -t document-management-service:test .
+
+      - name: Start application container
+        run: |
+          docker run -d --name app \
+            --network app-network \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/challenge \
+            -e SPRING_DATASOURCE_USERNAME=postgres \
+            -e SPRING_DATASOURCE_PASSWORD=postgres \
+            -e MINIO_ENDPOINT=http://minio:9000 \
+            -e MINIO_ACCESS_KEY=minioadmin \
+            -e MINIO_SECRET_KEY=minioadmin \
+            -e MINIO_BUCKET_NAME=documents \
+            -p 8080:8080 \
+            document-management-service:test
+          
+          echo "Waiting for application to start..."
+          timeout 60 bash -c 'until curl -f http://localhost:8080/actuator/health; do sleep 3; done'
+
+      - name: Test health endpoint
+        run: |
+          curl -f http://localhost:8080/actuator/health || exit 1
+          echo "✅ Application is healthy"
+
+      - name: Show application logs
+        if: always()
+        run: docker logs app
+
+      - name: Cleanup containers
+        if: always()
+        run: |
+          docker stop app postgres minio || true
+          docker rm app postgres minio || true
+          docker network rm app-network || true
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Spotless check
+        run: mvn spotless:check
+
+      - name: Verify no compilation warnings
+        run: mvn clean compile -Dmaven.compiler.showWarnings=true
+
+      - name: Check for outdated dependencies
+        run: mvn versions:display-dependency-updates
+        continue-on-error: true
+
+  summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-test, docker-build, integration-validation, code-quality]
+    if: always()
+
+    steps:
+      - name: Check results
+        run: |
+          echo "✅ Build and Test: ${{ needs.build-and-test.result }}"
+          echo "✅ Docker Build: ${{ needs.docker-build.result }}"
+          echo "✅ Integration Validation: ${{ needs.integration-validation.result }}"
+          echo "✅ Code Quality: ${{ needs.code-quality.result }}"
+          
+          if [ "${{ needs.build-and-test.result }}" != "success" ] || \
+             [ "${{ needs.docker-build.result }}" != "success" ] || \
+             [ "${{ needs.integration-validation.result }}" != "success" ] || \
+             [ "${{ needs.code-quality.result }}" != "success" ]; then
+            echo "❌ CI/CD Pipeline Failed"
+            exit 1
+          fi
+          
+          echo "✅ All CI/CD checks passed!"
+
