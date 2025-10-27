@@ -3,19 +3,17 @@ package com.clara.ops.challenge.document_management_service_challenge.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.TagEntity;
+import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.TagEntity;
-import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
 
 class DocumentMapperTest {
 

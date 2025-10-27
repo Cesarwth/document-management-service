@@ -1,7 +1,6 @@
 package com.clara.ops.challenge.document_management_service_challenge.domain.enums;
 
 import java.util.Optional;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

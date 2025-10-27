@@ -10,9 +10,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
+import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
+import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
+import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
+import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
+import io.minio.MinioClient;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +30,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
-import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
-import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
-import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
-import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
-
-import io.minio.MinioClient;
 
 @SpringBootTest
 @ActiveProfiles("test")

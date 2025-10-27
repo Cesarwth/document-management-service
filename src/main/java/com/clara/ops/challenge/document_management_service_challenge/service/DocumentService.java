@@ -1,18 +1,5 @@
 package com.clara.ops.challenge.document_management_service_challenge.service;
 
-import java.io.InputStream;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
@@ -29,9 +16,19 @@ import com.clara.ops.challenge.document_management_service_challenge.exception.D
 import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentUploadException;
 import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
 import com.clara.ops.challenge.document_management_service_challenge.mapper.DocumentMapper;
-
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
