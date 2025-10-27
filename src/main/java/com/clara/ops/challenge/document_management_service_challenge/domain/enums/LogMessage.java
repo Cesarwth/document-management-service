@@ -1,8 +1,9 @@
 package com.clara.ops.challenge.document_management_service_challenge.domain.enums;
 
+import org.slf4j.event.Level;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.event.Level;
 
 @Getter
 @RequiredArgsConstructor

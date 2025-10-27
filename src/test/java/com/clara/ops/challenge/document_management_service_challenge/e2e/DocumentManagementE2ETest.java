@@ -1,13 +1,15 @@
 package com.clara.ops.challenge.document_management_service_challenge.e2e;
 
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
-import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
-import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,15 +28,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
+import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
+import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

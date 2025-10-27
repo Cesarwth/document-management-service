@@ -1,15 +1,16 @@
 package com.clara.ops.challenge.document_management_service_challenge.validation;
 
-import com.clara.ops.challenge.document_management_service_challenge.config.DocumentManagementProperties;
-import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import com.clara.ops.challenge.document_management_service_challenge.config.DocumentManagementProperties;
+import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentValidatorTest {

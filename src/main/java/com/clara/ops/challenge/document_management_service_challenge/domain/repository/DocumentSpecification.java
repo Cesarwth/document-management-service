@@ -1,17 +1,20 @@
 package com.clara.ops.challenge.document_management_service_challenge.domain.repository;
 
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.TagEntity;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.TagEntity;
+
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class DocumentSpecification {

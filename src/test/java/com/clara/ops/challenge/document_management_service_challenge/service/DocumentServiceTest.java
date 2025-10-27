@@ -1,15 +1,23 @@
 package com.clara.ops.challenge.document_management_service_challenge.service;
 
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
-import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
-import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
-import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
-import com.clara.ops.challenge.document_management_service_challenge.mapper.DocumentMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,23 +30,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
+import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
+import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
+import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
+import com.clara.ops.challenge.document_management_service_challenge.mapper.DocumentMapper;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentServiceTest {
