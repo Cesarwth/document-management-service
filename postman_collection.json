@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Document Management Service API",
-    "description": "API Collection for Document Management Service Challenge",
+    "description": "API Collection for Document Management Service Challenge\n\n🚀 Quick Start:\n1. Ensure the application is running on http://localhost:8080\n2. For Upload: Replace the file path with an actual PDF file\n3. For Download: First search for documents, then copy a documentId from the results\n\n📋 Test Flow:\n1. Health Check → Verify service is running\n2. Upload Document → Upload a test PDF\n3. Search All → Find your uploaded document and copy its ID\n4. Download → Use the copied ID to get download URL",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -22,8 +22,9 @@
             {
               "key": "file",
               "type": "file",
-              "src": "/path/to/your/document.pdf",
-              "contentType": "application/pdf"
+              "src": "",
+              "contentType": "application/pdf",
+              "description": "⚠️ IMPORTANT: Click 'Select Files' and choose a PDF file from your computer"
             }
           ]
         },
@@ -34,7 +35,7 @@
           "port": "8080",
           "path": ["document-management", "upload"]
         },
-        "description": "Upload a PDF document with metadata (user, name, tags)"
+        "description": "📤 Upload a PDF document with metadata\n\n✅ Requirements:\n- File must be a PDF (.pdf extension)\n- Content-Type must be application/pdf\n- Max file size: 500MB\n- User, name, and tags are required\n\n📝 Metadata Fields:\n- user: Username who owns the document\n- name: Document name (without .pdf extension)\n- tags: Array of tags (at least one required)\n\n⚠️ Before sending:\n1. Update the 'metadata' JSON with your values\n2. Click 'Select Files' to choose a PDF file"
       },
       "response": []
     },
@@ -234,7 +235,7 @@
             }
           ]
         },
-        "description": "Get a presigned download URL for a document. Replace :documentId with actual UUID from search results."
+        "description": "📥 Get a presigned download URL for a document\n\n📋 Steps:\n1. First, run one of the Search requests\n2. Copy a 'documentId' (UUID) from the search results\n3. Paste it in the 'documentId' path variable below\n4. Send the request\n5. Copy the 'downloadUrl' from the response\n6. Open the URL in your browser to download the PDF\n\n⏱️ Note: The presigned URL expires after a configured time (check application settings)"
       },
       "response": []
     },
