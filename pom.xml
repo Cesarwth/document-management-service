@@ -144,12 +144,12 @@
 						<reflowLongStrings>true</reflowLongStrings>
 						<formatJavadoc>true</formatJavadoc>
 					</googleJavaFormat>
-				<removeUnusedImports/>
-				<importOrder>
-					<wildcardsLast>false</wildcardsLast>
-					<order>java,javax,jakarta,org,com</order>
-				</importOrder>
-				<formatAnnotations/>
+			<removeUnusedImports/>
+			<importOrder>
+				<wildcardsLast>false</wildcardsLast>
+				<order>\#,java,javax,jakarta,org,com</order>
+			</importOrder>
+			<formatAnnotations/>
 					</java>
 
 					<markdown>
