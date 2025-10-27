@@ -1,8 +1,8 @@
 package com.clara.ops.challenge.document_management_service_challenge.domain.entity;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TagEntityTest {
 

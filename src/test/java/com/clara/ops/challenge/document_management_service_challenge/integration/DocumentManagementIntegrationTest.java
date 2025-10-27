@@ -1,18 +1,14 @@
 package com.clara.ops.challenge.document_management_service_challenge.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
+import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
+import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
+import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
+import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
+import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
+import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
+import io.minio.MinioClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +19,18 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.PaginatedDocumentSearchResponse;
-import com.clara.ops.challenge.document_management_service_challenge.api.dto.UploadDocumentRequest;
-import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
-import com.clara.ops.challenge.document_management_service_challenge.domain.repository.DocumentRepository;
-import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentNotFoundException;
-import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
-import com.clara.ops.challenge.document_management_service_challenge.service.MinioService;
+import java.util.Arrays;
+import java.util.List;
 
-import io.minio.MinioClient;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")

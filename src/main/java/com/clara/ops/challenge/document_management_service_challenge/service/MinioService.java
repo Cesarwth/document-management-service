@@ -1,22 +1,20 @@
 package com.clara.ops.challenge.document_management_service_challenge.service;
 
-import java.io.InputStream;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.stereotype.Service;
-
 import com.clara.ops.challenge.document_management_service_challenge.config.MinioProperties;
 import com.clara.ops.challenge.document_management_service_challenge.domain.enums.LogMessage;
 import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentUploadException;
 import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
-
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
