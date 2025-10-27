@@ -3,12 +3,10 @@ package com.clara.ops.challenge.document_management_service_challenge.config;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
-
-import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(prefix = "document-management")

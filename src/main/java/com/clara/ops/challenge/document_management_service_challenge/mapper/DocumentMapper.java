@@ -1,16 +1,14 @@
 package com.clara.ops.challenge.document_management_service_challenge.mapper;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
 import com.clara.ops.challenge.document_management_service_challenge.domain.entity.DocumentEntity;
 import com.clara.ops.challenge.document_management_service_challenge.domain.entity.TagEntity;
 import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DocumentMapper {

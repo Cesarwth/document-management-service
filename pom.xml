@@ -133,24 +133,13 @@
 				<artifactId>spotless-maven-plugin</artifactId>
 				<version>${spotless.maven.plugin.version}</version>
 				<configuration>
-					<java>
-						<includes>
-							<include>src/main/java/**/*.java</include>
-							<include>src/test/java/**/*.java</include>
-						</includes>
-					<googleJavaFormat>
-						<version>${googleJavaFormat.version}</version>
-						<style>GOOGLE</style>
-						<reflowLongStrings>true</reflowLongStrings>
-						<formatJavadoc>true</formatJavadoc>
-					</googleJavaFormat>
-				<removeUnusedImports/>
-				<importOrder>
-					<wildcardsLast>false</wildcardsLast>
-					<order>java,javax,jakarta,org,com</order>
-				</importOrder>
-				<formatAnnotations/>
-					</java>
+				<java>
+					<includes>
+						<include>src/main/java/**/*.java</include>
+						<include>src/test/java/**/*.java</include>
+					</includes>
+					<removeUnusedImports/>
+				</java>
 
 					<markdown>
 						<includes>

@@ -8,23 +8,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.clara.ops.challenge.document_management_service_challenge.config.MinioProperties;
+import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentUploadException;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MinioClient;
+import io.minio.ObjectWriteResponse;
+import io.minio.PutObjectArgs;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.clara.ops.challenge.document_management_service_challenge.config.MinioProperties;
-import com.clara.ops.challenge.document_management_service_challenge.exception.DocumentUploadException;
-
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
-import io.minio.PutObjectArgs;
 
 @ExtendWith(MockitoExtension.class)
 class MinioServiceTest {

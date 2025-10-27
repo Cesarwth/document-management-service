@@ -16,18 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDownloadUrlResponse;
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentDto;
 import com.clara.ops.challenge.document_management_service_challenge.api.dto.DocumentSearchFilters;
@@ -40,6 +28,16 @@ import com.clara.ops.challenge.document_management_service_challenge.exception.I
 import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
 import com.clara.ops.challenge.document_management_service_challenge.validation.DocumentValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(DocumentManagementController.class)
 @Import(DocumentManagementProperties.class)

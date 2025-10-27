@@ -1,18 +1,15 @@
 package com.clara.ops.challenge.document_management_service_challenge.validation;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.clara.ops.challenge.document_management_service_challenge.config.DocumentManagementProperties;
 import com.clara.ops.challenge.document_management_service_challenge.domain.enums.FileType;
 import com.clara.ops.challenge.document_management_service_challenge.domain.enums.LogMessage;
 import com.clara.ops.challenge.document_management_service_challenge.domain.enums.ValidationMessage;
 import com.clara.ops.challenge.document_management_service_challenge.exception.InvalidDocumentException;
-
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Validator for document-related operations. Centralizes validation logic to keep controllers and

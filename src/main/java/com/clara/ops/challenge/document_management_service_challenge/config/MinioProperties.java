@@ -1,12 +1,10 @@
 package com.clara.ops.challenge.document_management_service_challenge.config;
 
 import jakarta.validation.constraints.NotBlank;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
-
-import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(prefix = "minio")
